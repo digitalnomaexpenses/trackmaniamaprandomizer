@@ -19,7 +19,6 @@ def add_track():
 	etags = data.get('etags')
 	vehicles = data.get('vehicles')
 	authorid = data.get('authorid')
-	count = data.get('count')
 	cookie = data.get('cookie')
 
 	_tags = ''
@@ -27,16 +26,6 @@ def add_track():
 	_etags = ''
 	_vehicles = ''
 	_authorid = ''
-	_count = 1 if not count else int(count)
-
-	if _count > 30:
-		return json.dumps(
-			{
-				"message_code": "103",
-				"message_type": "Error",
-				"message": "Please select less than 30 tracks"
-			}	
-		)
 
 	if tags:
 		_tags = 'tags='+tags
@@ -53,44 +42,37 @@ def add_track():
 	final_string = re.sub(r'[&]+', '&', final_string)
 	final_string = final_string.strip('&')
 
-	counter = 0
-	for i in range(_count):
-		url = final_string
-		res = requests.get(url)
-		find = re.findall(r'(?:mapdetailedinfo\?uid=[^#]{27})', res.text)
+	url = final_string
+	res = requests.get(url)
+	find = re.findall(r'(?:mapdetailedinfo\?uid=[^#]{27})', res.text)
 
-		if find:
-			track_id = find[0].replace('mapdetailedinfo?uid=', '')
-			print (track_id)
-			post_url = 'https://trackmania.exchange/api/maps/setingamefavourite?action=add&uid='+track_id
-			headers = {
-				'Cookie': cookie
-			}
-			res = requests.post(post_url, headers=headers)
-			print (res)
-			if res.status_code == 200:
-				counter += 1
-			else:
-				return json.dumps({
-					"message_code": "104",
-					"message_type": "Error",
-					"message": f"Some Error Occured. Added {counter} number of maps"
-				})
+	if find:
+		track_id = find[0].replace('mapdetailedinfo?uid=', '')
+		print (track_id)
+		post_url = 'https://trackmania.exchange/api/maps/setingamefavourite?action=add&uid='+track_id
+		headers = {
+			'Cookie': cookie
+		}
+		res = requests.post(post_url, headers=headers)
+		print (res)
+		if res.status_code == 200:
+			return json.dumps({
+				"message_code": "101",
+				"message_type": "Success",
+				"message": "Added Track"
+			})
 		else:
-			pass
-
-	if counter == 0:
-		return json.dumps({
-			"message_code": "102",
-			"message_type": "Failure",
-			"message": "No map Found"
-		})
+			return json.dumps({
+				"message_code": "104",
+				"message_type": "Error",
+				"message": "Some Error Occured"
+			})
 	else:
 		return json.dumps({
-			"message_code": "101",
-			"message_type": "Success",
-			"message": f"Added {counter} number of tracks"
-		})
+			"message_code": "103",
+			"message_type": "Error",
+			"message": "No Maps Found"
+		})	
 
 if __name__ == '__main__':
 	app.run()

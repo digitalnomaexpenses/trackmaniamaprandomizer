@@ -1,0 +1,8 @@
+{
+	"builds": [{
+		"src": "track_mania_map.py", "use":  "@vercel/python"
+	}],
+	"routes": [{
+		"src": "/(.*)", "dest": "track_mania_map.py"
+	}]
+}
