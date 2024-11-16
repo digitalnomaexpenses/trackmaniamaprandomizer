@@ -1,0 +1,46 @@
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+html, body {
+	height: 100%;
+	width: 100%;
+	background: #242424;
+	color: white;
+}
+
+header {
+	height: 10%;
+	background: #00955b;
+	font-family: "Montserrat";
+}
+
+#loader {
+	font-size: 3rem;
+	font-weight: bold;
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.25);
+	color: white;
+	padding: 20px;
+	border-radius: 5px;
+	font-size: 18px;
+}
+#info {
+	cursor: pointer;
+}
+#cookie-image {
+	width: 100%;
+}
+.form-control::placeholder {
+	color: #f8f9fa; /* Lighter color for better contrast */
+
+}
